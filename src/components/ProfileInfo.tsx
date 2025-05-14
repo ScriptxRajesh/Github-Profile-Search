@@ -12,13 +12,15 @@ const ProfileInfo: React.FC<props> = ({username, setTotalRepos}) => {
   const [userProfile, setUserProfile] = useState<Profile>();
 
   const [loading, setLoading] = useState(false);
-    const [error, setError] = useState<string>('');
+    const [error, setError] = useState<string | null>('');
 
     useEffect(() => {
       if(!username) return;
+      setLoading(true);
+      setError(null);
       const fetchUserProfile = async () => {
         try {
-          const res = await axios.get(`https:api.github.com/users/${username}`);
+          const res = await axios.get(`https://api.github.com/users/${username}`);
           // console.log(res);
           setUserProfile(res.data);
           // console.log(userProfile);
@@ -40,7 +42,7 @@ const ProfileInfo: React.FC<props> = ({username, setTotalRepos}) => {
     useEffect(()=>{
       setTotalRepos(userProfile?.public_repos ?? 0);
     }, [userProfile?.public_repos]);
-
+    // console.log(username);
     if(!userProfile) return null;
   return (
     <div className="w-full lg:w-2/5 bg-white rounded-lg shadow-md p-6 dark:bg-gray-800">

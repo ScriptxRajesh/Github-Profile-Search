@@ -28,8 +28,8 @@ const RepoList: React.FC<Props> = ({ username,totalRepos}) => {
       setRepos(res.data);
       setHasNextPage(res.data.length === REPOS_PER_PAGE);
     } catch (err) {
-      if (err instanceof Error) {
-        setError(err.message);
+      if(axios.isAxiosError(err)){
+        setError(err?.response?.data?.message || `An error occurred while fetching repositories of ${username}`);
       } else {
         setError(`An error occurred while fetching repositories of ${username}`);
       }
@@ -48,20 +48,30 @@ const RepoList: React.FC<Props> = ({ username,totalRepos}) => {
   }, [username, page]);
 
   return (
-    <div className="w-full md:w-2/3">
+    <div className="w-full">
       <div className="bg-white rounded-lg shadow-md p-6 dark:bg-gray-800">
         <h2 className="text-xl font-bold mb-4 text-gray-900 dark:text-white">
-          Repositories {totalRepos > 0 && (
+          {!error && (<>
+            Repositories {totalRepos > 0 && (
                           <span>
                             ({(page - 1) * REPOS_PER_PAGE + 1} - {Math.min(page * REPOS_PER_PAGE, totalRepos)})
                           </span>
                         )}
+          </>)}
         </h2>
 
-        {loading && <p className="text-gray-500">Loading...</p>}
-        {error && <p className="text-red-500">{error}</p>}
+        {loading && (
+          <div className='flex justify-center my-6'>
+            <div className='animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-500'></div>
+          </div>
+        )}
+        {error && (
+          <div className='p-3 bg-red-100 text-red-700 rounded-md mb-4 dark:bg-red-900 dark:text-red-200'>
+            {error}
+          </div>
+        )}
 
-        {!loading && repos.length === 0 ? (
+        {!loading && repos.length === 0 && !error ? (
           <p className="text-gray-500 dark:text-gray-400">This user has no public repositories.</p>
         ) : (
           <div className="space-y-4">

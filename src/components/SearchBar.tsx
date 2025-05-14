@@ -4,9 +4,10 @@ interface Props {
   search: string;
   setSearch: (value: string) => void;
   onSearch: () => void;
+  loading: boolean;
 }
 
-const SearchBar: React.FC<Props> = ({search, setSearch, onSearch}) => {
+const SearchBar: React.FC<Props> = ({search, setSearch, onSearch, loading}) => {
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if(e.key === 'Enter'){
@@ -30,7 +31,7 @@ const SearchBar: React.FC<Props> = ({search, setSearch, onSearch}) => {
         onClick={onSearch}
         className='bg-blue-800 text-white px-4 py-2 hover:bg-blue-900 rounded-r-md focus:outline-none focus:ring-2 focus:ring-blue-700 dark:hover:bg-blue-1000'
       >
-        Search
+        {loading ? 'Searching...':'Search'}
       </button>
     </div>
   )

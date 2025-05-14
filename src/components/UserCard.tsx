@@ -3,20 +3,15 @@ import { User } from '../types/github'
 import { useNavigate } from 'react-router-dom';
 interface Props {
   user: User;
-  onSelect: () => void;
-  selectedUser: string | null;
 }
 
-const UserCard: React.FC<Props> = ({user, onSelect, selectedUser}) => {
+const UserCard: React.FC<Props> = ({user}) => {
   const navigate = useNavigate();
   return (
     <div 
       key={user.id} 
-      className={`border dark:border-gray-700 rounded-lg p-4 transition-colors duration-200 ${
-        selectedUser === user.login 
-          ? 'bg-blue-50 border-blue-300 dark:bg-blue-900 dark:border-blue-700' 
-          : 'hover:bg-gray-50 dark:hover:bg-gray-700'
-      }`}
+      className={`border dark:border-gray-700 rounded-lg p-4 transition-colors duration-200 hover:bg-gray-50 dark:hover:bg-gray-700
+      `}
     >
       <div className="flex items-center justify-between">
         <div className="flex items-center">
